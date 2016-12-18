@@ -1,5 +1,5 @@
 {
-  "name": "dom-effects",
+  "name": "domfx",
   "version": "0.1.0",
   "description": "Simple effects for showing/hiding DOM elements",
   "main": "index.js",
