@@ -25,12 +25,11 @@ function fadeEffect (type, element, duration, then) {
     var start = utils.getOpacity(element);
     var end = type === "in" ? 1 : 0;
     
-    if (arguments.length < 2) {
+    if (typeof duration === "function") {
+        then = duration;
         duration = defaults.duration;
     }
-    
-    if (arguments.length < 3 && typeof duration === "function") {
-        then = duration;
+    else if (typeof duration !== "number") {
         duration = defaults.duration;
     }
     
