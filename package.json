@@ -1,0 +1,27 @@
+{
+  "name": "dom-effects",
+  "version": "0.1.0",
+  "description": "Simple effects for showing/hiding DOM elements",
+  "main": "index.js",
+  "scripts": {
+    "test": "cd tests/ && mocha ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iiyo/domfx.git"
+  },
+  "keywords": [
+    "effects",
+    "transitions",
+    "animations",
+    "dom"
+  ],
+  "author": "J. Steinbeck",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/iiyo/domfx/issues"
+  },
+  "homepage": "https://github.com/iiyo/domfx#readme",
+  "dependencies": {
+  }
+}
