@@ -110,9 +110,19 @@ function isOpacityZero (element) {
     return !(element.style.opacity === "" || element.style.opacity > 0);
 }
 
+function getThenArgument () {
+    return (
+        Array.prototype.find.call(arguments, function (arg) {
+            return typeof arg === "function";
+        }) ||
+        function () {}
+    );
+}
+
 module.exports = {
     getHeight: getHeight,
     getOpacity: getOpacity,
+    getThenArgument: getThenArgument,
     ensureIsPositive: ensureIsPositive,
     isHidden: isHidden,
     isOpacityZero: isOpacityZero,

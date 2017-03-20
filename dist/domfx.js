@@ -175,23 +175,20 @@ function applyRelevantStyles(element, style) {
     });
 }
 
-function slide (element, type, styles, duration, then) {
-    
-    var height = {
-        start: type === "in" ? 0 : utils.getHeight(element),
-        end: type === "in" ? parseInt(styles.computed.height, 10) : 0
-    };
+function slide (element, start, end, duration, then) {
     
     function update (v) {
         element.style.height = v + "px";
     }
     
-    utils.tween(type === "in" ? 0 : 1, type === "out" ? 0 : 1, update, duration, then);
+    utils.tween(start, end, update, duration, then);
 }
 
 function slideEffect (type, element, duration, then) {
     
+    var start = type === "in" ? 0 : utils.getHeight(element);
     var oldStyles = getOldStyles(element);
+    var end = type === "in" ? parseInt(oldStyles.computed.height, 10) : 0;
     
     if (type === "out") {
         preserveOldStyles(element);
@@ -214,7 +211,7 @@ function slideEffect (type, element, duration, then) {
         element.style.display = "";
     }
     
-    return slide(element, type, start, end, duration, after);
+    return slide(element, start, end, duration, after);
     
     function after () {
         
@@ -231,11 +228,25 @@ function slideEffect (type, element, duration, then) {
     }
 }
 
+function hasHeight (element) {
+    return window.getComputedStyle(element).height !== "0px";
+}
+
 function slideIn (element, duration, then) {
+    
+    if (hasHeight(element)) {
+        return utils.getThenArgument.apply(this, arguments)();
+    }
+    
     return slideEffect("in", element, duration, then);
 }
 
 function slideOut (element, duration, then) {
+    
+    if (!hasHeight(element)) {
+        return utils.getThenArgument.apply(this, arguments)();
+    }
+    
     return slideEffect("out", element, duration, then);
 }
 
@@ -370,9 +381,19 @@ function isOpacityZero (element) {
     return !(element.style.opacity === "" || element.style.opacity > 0);
 }
 
+function getThenArgument () {
+    return (
+        Array.prototype.find.call(arguments, function (arg) {
+            return typeof arg === "function";
+        }) ||
+        function () {}
+    );
+}
+
 module.exports = {
     getHeight: getHeight,
     getOpacity: getOpacity,
+    getThenArgument: getThenArgument,
     ensureIsPositive: ensureIsPositive,
     isHidden: isHidden,
     isOpacityZero: isOpacityZero,
