@@ -72,7 +72,22 @@ function tween (start, end, fn, duration, then) {
 }
 
 function getHeight (element) {
-    return element.offsetHeight;
+    
+    var height;
+    
+//
+// If an element is hidden, it needs to be made visible temporarily to calculate its real height.
+//
+    if (element.style.display === "none") {
+        element.style.display = "";
+        height = window.getComputedStyle(element).height;
+        element.style.display = "none";
+    }
+    else {
+        height = window.getComputedStyle(element).height;
+    }
+    
+    return parseInt(height, 10);
 }
 
 function hasHeight (element) {
