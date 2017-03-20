@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.2 (2017-03-20)
+
+ * Improve effect smoothness
+ * Add example HTML file
+
 ## 0.3.1 (2017-03-20)
 
  * Add slide effect

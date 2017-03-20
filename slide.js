@@ -6,10 +6,10 @@ var ATTRIBUTE = "data-old-style";
 
 var RELEVANT_STYLES = [
     "height",
-    "margin-top",
-    "margin-bottom",
-    "padding-top",
-    "padding-bottom",
+    "marginTop",
+    "marginBottom",
+    "paddingTop",
+    "paddingBottom",
     "overflow",
     "display"
 ];
@@ -65,6 +65,9 @@ function getOldStyles (element) {
             value.computed = extractRelevantStyles(window.getComputedStyle(element));
             element.style.display = "none";
         }
+        else {
+            value.computed = extractRelevantStyles(window.getComputedStyle(element));
+        }
         
         return value;
     }
@@ -78,20 +81,29 @@ function applyRelevantStyles(element, style) {
     });
 }
 
-function slide (element, start, end, duration, then) {
+function slide (element, values, duration, then) {
+    
+    console.log(values);
     
     function update (v) {
-        element.style.height = v + "px";
+        
+        v = utils.easing.swing(v);
+        
+        element.style.height = (v * values.height) + "px";
+        element.style.paddingTop = (v * values.paddingTop) + "px";
+        element.style.paddingBottom = (v * values.paddingTop) + "px";
+        element.style.marginTop = (v * values.marginTop) + "px";
+        element.style.marginBottom = (v * values.marginTop) + "px";
     }
     
-    utils.tween(start, end, update, duration, then);
+    utils.tween(values.start, values.end, update, duration, then);
 }
 
 function slideEffect (type, element, duration, then) {
     
-    var start = type === "in" ? 0 : utils.getHeight(element);
+    var start = type === "in" ? 0 : 1;
     var oldStyles = getOldStyles(element);
-    var end = type === "in" ? parseInt(oldStyles.computed.height, 10) : 0;
+    var end = type === "in" ? 1 : 0;
     
     if (type === "out") {
         preserveOldStyles(element);
@@ -114,7 +126,20 @@ function slideEffect (type, element, duration, then) {
         element.style.display = "";
     }
     
-    return slide(element, start, end, duration, after);
+    return slide(
+        element, 
+        {
+            start: start,
+            end: end,
+            height: toPx(oldStyles.computed.height),
+            paddingTop: toPx(oldStyles.computed.paddingTop),
+            paddingBottom: toPx(oldStyles.computed.paddingBottom),
+            marginTop: toPx(oldStyles.computed.marginTop),
+            marginBottom: toPx(oldStyles.computed.marginBottom)
+        },
+        duration,
+        after
+    );
     
     function after () {
         
@@ -129,6 +154,13 @@ function slideEffect (type, element, duration, then) {
             then();
         }
     }
+}
+
+function toPx (value) {
+    
+    value = parseInt(value, 10);
+    
+    return (value ? value : 0);
 }
 
 function hasHeight (element) {

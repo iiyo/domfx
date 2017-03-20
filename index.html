@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <title>domfx</title>
+        
+        <style>
+            .target-container {
+                padding: 10px;
+                background: grey;
+            }
+            
+            .target {
+                background: blue;
+                color: white;
+                padding: 5px;
+                margin: 10px;
+            }
+        </style>
+        
+    </head>
+    <body>
+        
+        <div>
+            
+            <h2>DOMFX.fade</h2>
+            
+            <button class="fade-toggler" data-target=".fade-toggler-target">Fade</button>
+            
+            <div class="target-container">
+                <div class="fade-toggler-target target">
+                    Click the button to toggle the fade effect!
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            
+            <h2>DOMFX.slide</h2>
+            
+            <button class="slide-toggler" data-target=".slide-toggler-target">Slide</button>
+            
+            <div class="target-container">
+                <div class="slide-toggler-target target">
+                    Click the button to toggle the slide effect!
+                </div>
+            </div>
+        </div>
+        
+        <script src="dist/domfx.js"></script>
+        <script>
+            (function () {
+                
+                function setUpEffect (name) {
+                    
+                    var toggler = document.querySelector("." + name + "-toggler");
+                    var target = document.querySelector(toggler.getAttribute("data-target"));
+                    
+                    toggler.addEventListener("click", function () {
+                        DOMFX[name].toggle(target);
+                    });
+                }
+                
+                setUpEffect("fade");
+                setUpEffect("slide");
+                
+            }());
+        </script>
+    </body>
+</html>
