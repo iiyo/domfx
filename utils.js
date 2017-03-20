@@ -119,6 +119,10 @@ function getThenArgument () {
     );
 }
 
+function swing (t) {
+    return 0.5 - Math.cos(t * Math.PI) / 2;
+}
+
 module.exports = {
     getHeight: getHeight,
     getOpacity: getOpacity,
@@ -128,5 +132,8 @@ module.exports = {
     isOpacityZero: isOpacityZero,
     hasHeight: hasHeight,
     transform: transform,
-    tween: tween
+    tween: tween,
+    easing: {
+        swing: swing
+    }
 };
