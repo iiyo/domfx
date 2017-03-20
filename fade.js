@@ -5,7 +5,7 @@ var utils = require("./utils.js");
 function fade (element, start, end, duration, then) {
     
     function update (v) {
-        element.style.opacity = v;
+        element.style.opacity = utils.easing.swing(v);
     }
     
     utils.tween(start, end, update, duration, then);
