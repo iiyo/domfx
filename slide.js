@@ -83,8 +83,6 @@ function applyRelevantStyles(element, style) {
 
 function slide (element, values, duration, then) {
     
-    console.log(values);
-    
     function update (v) {
         
         v = utils.easing.swing(v);
