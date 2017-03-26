@@ -78,8 +78,8 @@ function getHeight (element) {
 //
 // If an element is hidden, it needs to be made visible temporarily to calculate its real height.
 //
-    if (element.style.display === "none") {
-        element.style.display = "";
+    if (window.getComputedStyle(element).display === "none") {
+        element.style.display = "block";
         height = window.getComputedStyle(element).height;
         element.style.display = "none";
     }
@@ -103,7 +103,7 @@ function ensureIsPositive (v) {
 }
 
 function isHidden (element) {
-    return element.style.display === "none";
+    return window.getComputedStyle(element).display === "none";
 }
 
 function isOpacityZero (element) {

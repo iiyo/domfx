@@ -5,6 +5,11 @@
         <title>domfx</title>
         
         <style>
+            
+            .hidden {
+                display: none;
+            }
+            
             .target-container {
                 padding: 10px;
                 background: grey;
@@ -23,7 +28,7 @@
         
         <div>
             
-            <h2>DOMFX.fade</h2>
+            <h2>DOMFX.fade on visible element</h2>
             
             <button class="fade-toggler" data-target=".fade-toggler-target">Fade</button>
             
@@ -36,7 +41,7 @@
         
         <div>
             
-            <h2>DOMFX.slide</h2>
+            <h2>DOMFX.slide on visible element</h2>
             
             <button class="slide-toggler" data-target=".slide-toggler-target">Slide</button>
             
@@ -47,22 +52,80 @@
             </div>
         </div>
         
+        <div>
+            
+            <h2>DOMFX.fade on element with display: none set via attribute or JS</h2>
+            
+            <button class="fade-js-toggler" data-target=".fade-js-toggler-target">Fade</button>
+            
+            <div class="target-container">
+                <div style="display: none;" class="fade-js-toggler-target target">
+                    Click the button to toggle the fade effect!
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            
+            <h2>DOMFX.slide on element with display: none set via attribute or JS</h2>
+            
+            <button class="slide-js-toggler" data-target=".slide-js-toggler-target">Slide</button>
+            
+            <div class="target-container">
+                <div style="display: none;" class="slide-js-toggler-target target">
+                    Click the button to toggle the slide effect!
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            
+            <h2>DOMFX.fade on element with display: none set in CSS</h2>
+            
+            <button class="fade-css-toggler" data-target=".fade-css-toggler-target">Fade</button>
+            
+            <div class="target-container">
+                <div class="fade-css-toggler-target target hidden">
+                    Click the button to toggle the fade effect!
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            
+            <h2>DOMFX.slide on element with display: none set in CSS</h2>
+            
+            <button class="slide-css-toggler" data-target=".slide-css-toggler-target">Slide</button>
+            
+            <div class="target-container">
+                <div class="slide-css-toggler-target target hidden">
+                    Click the button to toggle the slide effect!
+                </div>
+            </div>
+        </div>
+        
         <script src="dist/domfx.js"></script>
         <script>
             (function () {
                 
-                function setUpEffect (name) {
+                function setUpEffect (effect, name) {
                     
                     var toggler = document.querySelector("." + name + "-toggler");
                     var target = document.querySelector(toggler.getAttribute("data-target"));
                     
                     toggler.addEventListener("click", function () {
-                        DOMFX[name].toggle(target);
+                        DOMFX[effect].toggle(target);
                     });
                 }
                 
-                setUpEffect("fade");
-                setUpEffect("slide");
+                setUpEffect("fade", "fade");
+                setUpEffect("slide", "slide");
+                
+                setUpEffect("fade", "fade-js");
+                setUpEffect("slide", "slide-js");
+                
+                setUpEffect("fade", "fade-css");
+                setUpEffect("slide", "slide-css");
                 
             }());
         </script>

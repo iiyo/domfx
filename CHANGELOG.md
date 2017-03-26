@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.3 (2017-03-26)
+
+ * Fix: effects didn't work when `display: none` was set using CSS
+
 ## 0.3.2 (2017-03-20)
 
  * Improve effect smoothness

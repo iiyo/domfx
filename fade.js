@@ -51,9 +51,23 @@ function fadeEffect (type, element, duration, then) {
 
 function fadeIn (element, duration, then) {
     
-    if (element.style.display === "none") {
+    var ownDisplay = element.style.display;
+    
+//
+// If the element's own value for `display` is `none`, we have to remove
+// this value; if after that the element is still set to `none` for its
+// computed values, it means that `none` was set in CSS and we have to
+// assume this is a block element. Setting `display` to `""` in this case
+// wouldn't accomplish anything.
+//
+    if (ownDisplay === "none") {
         element.style.opacity = "0";
         element.style.display = "";
+    }
+    
+    if (window.getComputedStyle(element).display === "none") {
+        element.style.opacity = "0";
+        element.style.display = "block";
     }
     
     return fadeEffect("in", element, duration, then);

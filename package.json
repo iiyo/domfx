@@ -1,6 +1,6 @@
 {
   "name": "domfx",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Simple effects for showing/hiding DOM elements",
   "main": "index.js",
   "scripts": {

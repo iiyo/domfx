@@ -60,8 +60,8 @@ function getOldStyles (element) {
             computed: {}
         };
         
-        if (element.style.display === "none") {
-            element.style.display = "";
+        if (window.getComputedStyle(element).display === "none") {
+            element.style.display = "block";
             value.computed = extractRelevantStyles(window.getComputedStyle(element));
             element.style.display = "none";
         }
@@ -121,7 +121,12 @@ function slideEffect (type, element, duration, then) {
     element.style.overflow = "hidden";
     
     if (type === "in") {
-        element.style.display = "";
+        if (window.getComputedStyle(element).display === "none") {
+            element.style.display = "block";
+        }
+        else {
+            element.style.display = "";
+        }
     }
     
     return slide(
@@ -162,12 +167,25 @@ function toPx (value) {
 }
 
 function hasHeight (element) {
-    return window.getComputedStyle(element).height !== "0px";
+    
+    var height;
+    var style = window.getComputedStyle(element);
+    
+    if (style.display === "none") {
+        element.style.display = "block";
+        height = window.getComputedStyle(element).height;
+        element.style.display = "none";
+    }
+    else {
+        height = style.height;
+    }
+    
+    return height !== "0px";
 }
 
 function slideIn (element, duration, then) {
     
-    if (hasHeight(element)) {
+    if (window.getComputedStyle(element).display !== "none" && hasHeight(element)) {
         return utils.getThenArgument.apply(this, arguments)();
     }
     
