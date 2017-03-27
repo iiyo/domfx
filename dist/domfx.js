@@ -131,13 +131,10 @@ function extractRelevantStyles (styles) {
     
     var relevant = {};
     
-    Object.keys(styles).forEach(function (key) {
-        
-        if (RELEVANT_STYLES.indexOf(key) < 0) {
-            return;
+    RELEVANT_STYLES.forEach(function (property) {
+        if (property in styles) {
+            relevant[property] = styles[property];
         }
-        
-        relevant[key] = styles[key];
     });
     
     return relevant;
