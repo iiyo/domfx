@@ -113,7 +113,9 @@ window.DOMFX = {
 var defaults = require("./defaults.js");
 var utils = require("./utils.js");
 
-var ATTRIBUTE = "data-old-style";
+var OLD_STYLE_ATTRIBUTE = "data-old-style";
+var BLOCKING_ATTRIBUTE = "data-block-toggle-effect";
+var BLOCKED_VALUE = "blocked";
 
 var RELEVANT_STYLES = [
     "height",
@@ -148,11 +150,15 @@ function preserveOldStyles (element) {
     var computed = window.getComputedStyle(element);
     
     RELEVANT_STYLES.forEach(function (style) {
+        
         styles[style] = computed[style];
-        old[style] = element.style[style];
+        
+        if (style in element.style) {
+            old[style] = element.style[style];
+        }
     });
     
-    element.setAttribute(ATTRIBUTE, JSON.stringify({
+    element.setAttribute(OLD_STYLE_ATTRIBUTE, JSON.stringify({
         old: old,
         computed: styles
     }));
@@ -162,7 +168,7 @@ function preserveOldStyles (element) {
 
 function getOldStyles (element) {
     
-    var value = element.getAttribute(ATTRIBUTE);
+    var value = element.getAttribute(OLD_STYLE_ATTRIBUTE);
     
     if (!value) {
         
@@ -188,7 +194,11 @@ function getOldStyles (element) {
 
 function applyRelevantStyles(element, style) {
     RELEVANT_STYLES.forEach(function (name) {
-        element.style[name] = style[name];
+        
+        if (name in style) {
+            element.style[name] = style[name];
+        }
+        
     });
 }
 
@@ -210,25 +220,32 @@ function slide (element, values, duration, then) {
 
 function slideEffect (type, element, duration, then) {
     
-    var start = type === "in" ? 0 : 1;
-    var oldStyles = getOldStyles(element);
-    var end = type === "in" ? 1 : 0;
+    var start, end, oldStyles;
+    
+    if (arguments.length < 3) {
+        duration = defaults.duration;
+    }
+    
+    if (arguments.length < 4 && typeof duration === "function") {
+        then = duration;
+        duration = defaults.duration;
+    }
+    
+    if (element.getAttribute(BLOCKING_ATTRIBUTE) === BLOCKED_VALUE) {
+        return (then ? then() : undefined);
+    }
+    
+    element.setAttribute(BLOCKING_ATTRIBUTE, BLOCKED_VALUE);
+    
+    start = type === "in" ? 0 : 1;
+    oldStyles = getOldStyles(element);
+    end = type === "in" ? 1 : 0;
     
     if (type === "out") {
         preserveOldStyles(element);
     }
     
-    if (arguments.length < 2) {
-        duration = defaults.duration;
-    }
-    
-    if (arguments.length < 3 && typeof duration === "function") {
-        then = duration;
-        duration = defaults.duration;
-    }
-    
     duration = utils.ensureIsPositive(duration);
-    
     element.style.overflow = "hidden";
     
     if (type === "in") {
@@ -256,6 +273,8 @@ function slideEffect (type, element, duration, then) {
     );
     
     function after () {
+        
+        element.removeAttribute(BLOCKING_ATTRIBUTE);
         
         if (type === "out") {
             element.style.display = "none";

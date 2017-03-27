@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.4 (2017-03-27)
+
+ * Fix: slide effect could "destroy" hight of element
+ * Fix: empty old values were written to the element after the slide effect
+
 ## 0.3.3 (2017-03-26)
 
  * Fix: effects didn't work when `display: none` was set using CSS
